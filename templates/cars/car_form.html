@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание автомобиля</title>
+</head>
+<body>
+    <h1>{% if car.pk %}Редактировать{% else %}Создать{% endif %} автомобиль</h1>
+    <form method="post" action="{% url 'car-create' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if car.pk %}Обновить{% else %}Создать{% endif %}</button>
+    </form>
+</body>
+</html>

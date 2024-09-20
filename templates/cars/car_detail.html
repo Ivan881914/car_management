@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ car.make }} {{ car.model }}</title>
+</head>
+<body>
+    <h1>{{ car.make }} {{ car.model }} ({{ car.year }})</h1>
+    <p>{{ car.description }}</p>
+    <p>Дата создания: {{ car.created_at }}</p>
+    <p>Последнее обновление: {{ car.updated_at }}</p>
+
+    <h2>Комментарии:</h2>
+    <ul>
+        {% for comment in car.comments.all %}
+            <li>
+                <strong>{{ comment.author.username }}</strong> : {{ comment.content }} 
+                <br> <small>Дата: {{ comment.created_at }}</small>
+            </li>
+        {% empty %}
+            <p>Пока нет комментариев. Будьте первым, кто оставит комментарий!</p>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+        <h3>Оставить комментарий:</h3>
+        <form method="post" action="{% url 'add-comment' car.pk %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Добавить комментарий</button>
+        </form>
+    {% else %}
+        <p>Пожалуйста, <a href="{% url 'login' %}">войдите в систему</a>, чтобы оставлять комментарии.</p>
+    {% endif %}
+
+    <br>
+    <a href="{% url 'car-edit' car.pk %}">Редактировать автомобиль</a> |
+    <a href="{% url 'car-delete' car.pk %}">Удалить автомобиль</a>
+    <br><br>
+    <a href="{% url 'car-list' %}">Вернуться к списку автомобилей</a>
+</body>
+</html>
